@@ -7,10 +7,11 @@
     "babel": "^5.8.23",
     "good": "^6.4.0",
     "good-console": "^5.2.0",
-    "hapi": "^10.4.0"
+    "hapi": "^10.4.0",
+    "mongoose": "^4.2.5"
   },
   "scripts": {
-    "start": "eslint server.js && node start.js"
+    "start": "node start.js"
   },
   "keywords": [],
   "author": "Inderpal Singh",

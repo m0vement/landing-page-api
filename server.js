@@ -1,7 +1,8 @@
 import Hapi from 'hapi';
+import Good from 'good';
 
 const server = new Hapi.Server();
-server.connection({port: 3000});
+server.connection({port: ~~process.env.PORT || 3000});
 
 server.route({
   method: 'GET',
@@ -19,6 +20,23 @@ server.route({
   },
 });
 
-server.start(() => {
-  console.log(`Server running at ${server.info.uri}`);
+server.register({
+  register: Good,
+  options: {
+    reporters: [{
+      reporter: require('good-console'),
+      events: {
+        response: '*',
+        log: '*',
+      },
+    }],
+  },
+}, (err) => {
+  if (err) {
+    throw err; // something bad happened loading the plugin
+  }
+
+  server.start(() => {
+    server.log('info', 'Server running at: ' + server.info.uri);
+  });
 });

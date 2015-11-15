@@ -3,7 +3,7 @@ import Mongoose from 'mongoose';
 import createServer from '../src/server';
 import Signup from '../src/signup';
 import chai from 'chai';
-import rp from 'request-promise';
+const rp = require('request-promise').defaults({ simple: false });
 
 const expect = chai.expect;
 
@@ -64,10 +64,14 @@ describe('Signups', () => {
         body: {
           ipAddress: '192.168.0.1',
           data: 'some-data',
+          redirectUrl: '/',
         },
       }).then((resp) => {
-        expect(resp.body.signup.data).to.equal('some-data');
-        done();
+        expect(resp.statusCode).to.equal(302);
+        Signup.findOne({ipAddress: '192.168.0.1'}, (err, signup) => {
+          expect(signup.data).to.equal('some-data');
+          done();
+        });
       });
     });
 

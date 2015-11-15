@@ -35,11 +35,11 @@ export default function createServer(port) {
     Signup.findOne({ ipAddress: reqBody.ipAddress }, (err, existingSignup) => {
       if (existingSignup) {
         existingSignup.data = reqBody.data;
-        existingSignup.save((err1, signupResponse) => {
-          res.status(200).send({signup: signupResponse});
+        existingSignup.save(() => {
+          res.redirect(reqBody.redirectUrl);
         });
       } else {
-        res.status(200).send({});
+        res.redirect(reqBody.redirectUrl);
       }
     });
   });

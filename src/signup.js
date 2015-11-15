@@ -7,6 +7,7 @@ const signupSchema = new Mongoose.Schema({
   identifier: { type: String },
   visitCount: { type: Number, default: 0 },
   data: { type: String },
+  createdAt: { type: Date },
 });
 
 export default Mongoose.model('Signup', signupSchema, 'Signups');

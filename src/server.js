@@ -4,6 +4,7 @@ import Signup from './signup';
 
 export default function createServer(port) {
   const app = express();
+  const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
   app.use(bodyParser.text({
     type: 'application/json',
@@ -30,16 +31,15 @@ export default function createServer(port) {
     });
   });
 
-  app.post('/signup', (req, res) => {
-    const reqBody = JSON.parse(req.body);
-    Signup.findOne({ ipAddress: reqBody.ipAddress }, (err, existingSignup) => {
+  app.post('/signup', urlencodedParser, (req, res) => {
+    Signup.findOne({ ipAddress: req.body.ipAddress }, (err, existingSignup) => {
       if (existingSignup) {
-        existingSignup.data = reqBody.data;
+        existingSignup.data = req.body.data;
         existingSignup.save(() => {
-          res.redirect(reqBody.redirectUrl);
+          res.redirect(req.body.redirectUrl);
         });
       } else {
-        res.redirect(reqBody.redirectUrl);
+        res.redirect(req.body.redirectUrl);
       }
     });
   });

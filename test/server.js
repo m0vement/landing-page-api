@@ -58,14 +58,16 @@ describe('Signups', () => {
       expect(response.body.signup.data).to.equal(undefined);
       rp({
         method: 'POST',
-        json: true,
         uri: url + '/signup',
-        resolveWithFullResponse: true,
-        body: {
+        form: {
           ipAddress: '192.168.0.1',
           data: 'some-data',
           redirectUrl: '/',
         },
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded',
+        },
+        resolveWithFullResponse: true,
       }).then((resp) => {
         expect(resp.statusCode).to.equal(302);
         Signup.findOne({ipAddress: '192.168.0.1'}, (err, signup) => {
